@@ -15,7 +15,6 @@ function App() {
     if (hourRef.current) {
       hourRef.current.style.transform = `rotate(${hoursDegrees}deg)`;
     }
-    console.log(hours);
 
     const minutes = now.getMinutes();
     const minutesDegrees = (minutes / 60) * 360 + 90;
