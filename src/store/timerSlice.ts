@@ -22,10 +22,10 @@ export const timerSlice = createSlice({
       state.hour = action.payload;
     },
     updateMinute: (state, action: PayloadAction<number>) => {
-      state.hour = action.payload;
+      state.minute = action.payload;
     },
     updateSecond: (state, action: PayloadAction<number>) => {
-      state.hour = action.payload;
+      state.second = action.payload;
     },
   },
 });
