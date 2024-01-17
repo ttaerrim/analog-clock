@@ -1,10 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
 
 function App() {
   const hourRef = useRef<HTMLDivElement>(null);
   const minuteRef = useRef<HTMLDivElement>(null);
   const secondRef = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  const [mousePosition, setMousePosition] = useState<{ x: null | number; y: null | number }>({ x: null, y: null });
 
   const setSeconds = () => {
     const now = new Date();
@@ -34,8 +37,25 @@ function App() {
   useEffect(() => {
     setSeconds();
     const secInterval = setInterval(setSeconds, 1000);
-    return () => clearInterval(secInterval);
+
+    const updateMousePosition = (ev: MouseEvent) => {
+      setMousePosition({ x: ev.clientX, y: ev.clientY });
+    };
+
+    window.addEventListener('mousemove', updateMousePosition);
+
+    return () => {
+      clearInterval(secInterval);
+      window.removeEventListener('mousemove', updateMousePosition);
+    };
   }, []);
+
+  useEffect(() => {
+    if (tooltipRef.current && mousePosition.x && mousePosition.y) {
+      tooltipRef.current.style.top = mousePosition.y - 20 + 'px';
+      tooltipRef.current.style.left = mousePosition.x + 20 + 'px';
+    }
+  }, [mousePosition, tooltipRef]);
 
   return (
     <div className='clock'>
@@ -43,6 +63,9 @@ function App() {
         <div className='hand hour' ref={hourRef}></div>
         <div className='hand minute' ref={minuteRef}></div>
         <div className='hand second' ref={secondRef}></div>
+        <div className='tooltip' ref={tooltipRef}>
+          hover
+        </div>
       </div>
     </div>
   );

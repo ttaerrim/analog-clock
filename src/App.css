@@ -20,3 +20,16 @@
   top: 50%;
   transform-origin: 100%;
 }
+
+.clock-face .tooltip {
+  display: none;
+}
+
+.clock-face:hover .tooltip {
+  display: inline-block;
+  background: #ffffff;
+  border: 1px solid #5d5d5d;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  position: fixed;
+}
