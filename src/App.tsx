@@ -1,43 +1,60 @@
 import { useEffect, useRef } from 'react';
 import './App.css';
 import Tooltip from './Tooltip';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from './store';
+import { updateHour, updateMinute, updateSecond } from './store/timerSlice';
 
 function App() {
   const hourRef = useRef<HTMLDivElement>(null);
   const minuteRef = useRef<HTMLDivElement>(null);
   const secondRef = useRef<HTMLDivElement>(null);
 
-  const setSeconds = () => {
-    const now = new Date();
+  const hour = useSelector((state: RootState) => state.timers.hour);
+  const minute = useSelector((state: RootState) => state.timers.minute);
+  const second = useSelector((state: RootState) => state.timers.second);
+  const dispatch = useDispatch();
 
-    const hours = now.getHours() % 12;
-    const hoursDegrees = (hours / 12) * 360 + 90;
+  useEffect(() => {
+    const setSeconds = () => {
+      dispatch(updateSecond(new Date().getSeconds()));
+    };
+    const secInterval = setInterval(setSeconds, 1000);
 
-    if (hourRef.current) {
-      hourRef.current.style.transform = `rotate(${hoursDegrees}deg)`;
+    return () => clearInterval(secInterval);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const secondsDegrees = (second / 60) * 360 + 90;
+
+    if (secondRef.current) {
+      secondRef.current.style.transform = `rotate(${secondsDegrees}deg)`;
     }
 
-    const minutes = now.getMinutes();
-    const minutesDegrees = (minutes / 60) * 360 + 90;
+    if (second === 0) {
+      dispatch(updateMinute(new Date().getMinutes()));
+    }
+  }, [dispatch, second]);
+
+  useEffect(() => {
+    const minutesDegrees = (minute / 60) * 360 + 90;
 
     if (minuteRef.current) {
       minuteRef.current.style.transform = `rotate(${minutesDegrees}deg)`;
     }
 
-    const seconds = now.getSeconds();
-    const secondsDegrees = (seconds / 60) * 360 + 90;
-
-    if (secondRef.current) {
-      secondRef.current.style.transform = `rotate(${secondsDegrees}deg)`;
+    if (minute === 0) {
+      dispatch(updateHour(new Date().getHours()));
     }
-  };
+  }, [minute, dispatch]);
 
   useEffect(() => {
-    setSeconds();
-    const secInterval = setInterval(setSeconds, 1000);
+    const hoursDegrees = (hour / 12) * 360 + 90;
 
-    return () => clearInterval(secInterval);
-  }, []);
+    if (hourRef.current) {
+      hourRef.current.style.transform = `rotate(${hoursDegrees}deg)`;
+    }
+  }, [hour]);
 
   return (
     <div className='clock'>
