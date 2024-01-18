@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from './store';
-import useMousePosition from './hooks/useMousePosition';
+import { RootState } from '../store';
+import useMousePosition from '../hooks/useMousePosition';
 
 function Tooltip() {
   const hour = useSelector((state: RootState) => state.timers.hour);

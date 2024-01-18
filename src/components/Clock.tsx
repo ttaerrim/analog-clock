@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import Tooltip from './Tooltip';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from './store';
-import { updateHour, updateMinute, updateSecond } from './store/timerSlice';
+import { RootState } from '../store';
+import { updateHour, updateMinute, updateSecond } from '../store/timerSlice';
 
 function Clock() {
   const hourRef = useRef<HTMLDivElement>(null);
