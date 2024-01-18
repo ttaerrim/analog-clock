@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
+import useMousePosition from './hooks/useMousePosition';
 
 function Tooltip() {
   const hour = useSelector((state: RootState) => state.timers.hour);
@@ -11,17 +12,7 @@ function Tooltip() {
 
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const [mousePosition, setMousePosition] = useState<{ x: null | number; y: null | number }>({ x: null, y: null });
-
-  useEffect(() => {
-    const updateMousePosition = (ev: MouseEvent) => {
-      setMousePosition({ x: ev.clientX, y: ev.clientY });
-    };
-
-    window.addEventListener('mousemove', updateMousePosition);
-
-    return () => window.removeEventListener('mousemove', updateMousePosition);
-  }, []);
+  const mousePosition = useMousePosition();
 
   useEffect(() => {
     if (tooltipRef.current && mousePosition.x && mousePosition.y) {
