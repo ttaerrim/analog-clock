@@ -16,10 +16,17 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const setSeconds = () => {
-      dispatch(updateSecond(new Date().getSeconds()));
+    const setTimes = () => {
+      const now = new Date();
+      dispatch(updateSecond(now.getSeconds()));
+      if (now.getSeconds() === 0) {
+        dispatch(updateMinute(now.getMinutes()));
+        if (now.getMinutes() === 0) {
+          dispatch(updateHour(now.getHours()));
+        }
+      }
     };
-    const secInterval = setInterval(setSeconds, 1000);
+    const secInterval = setInterval(setTimes, 1000);
 
     return () => clearInterval(secInterval);
   }, [dispatch]);
@@ -30,11 +37,7 @@ function App() {
     if (secondRef.current) {
       secondRef.current.style.transform = `rotate(${secondsDegrees}deg)`;
     }
-
-    if (second === 0) {
-      dispatch(updateMinute(new Date().getMinutes()));
-    }
-  }, [dispatch, second]);
+  }, [second]);
 
   useEffect(() => {
     const minutesDegrees = (minute / 60) * 360 + 90;
@@ -42,11 +45,7 @@ function App() {
     if (minuteRef.current) {
       minuteRef.current.style.transform = `rotate(${minutesDegrees}deg)`;
     }
-
-    if (minute === 0) {
-      dispatch(updateHour(new Date().getHours()));
-    }
-  }, [minute, dispatch]);
+  }, [minute]);
 
   useEffect(() => {
     const hoursDegrees = (hour / 12) * 360 + 90;
